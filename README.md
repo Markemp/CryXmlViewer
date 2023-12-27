@@ -4,11 +4,9 @@ This VS Code extension allows you to view binary XML files from Cryengine games 
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This is a simple binary xml viewer that can read CryXml and pbxml files.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
+![How to use](src/images/CryXmlViewer.gif)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
@@ -28,9 +26,9 @@ There are no known issues.
 
 None
 
-### 0.0.1
+### 1.0.0
 
-Initial test release of cryxmlviewer
+Initial release of cryxmlviewer
 
 ---
 

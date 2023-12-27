@@ -3,12 +3,13 @@
   "displayName": "CryXmlViewer",
   "description": "Viewer for the binary XML files used in CryEngine",
   "publisher": "Heffay Presents",
+  "icon": "src/icons/logo-120px-prod.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/Markemp/CryXmlViewer"
   },
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.85.0"
   },
