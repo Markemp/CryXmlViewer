@@ -1,0 +1,67 @@
+{
+  "name": "cryxmlviewer",
+  "displayName": "CryXmlViewer",
+  "description": "Viewer for the binary XML files used in CryEngine",
+  "publisher": "Heffay Presents",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cryxmlviewer.openBinaryXml",
+        "title": "Open CryEngine binary XML File (CryXmlB or PbXml)"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+            "when": "resourceLangId == plaintext",
+            "command": "cryxmlviewer.openBinaryXml",
+            "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "mocha -r ts-node/register src/test/unit_tests/**/*.ts",
+    "test:vscode": "node src/test/vscode_tests/extension.test.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@types/xml2js": "^0.4.14",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8",
+    "chai": "^4.3.10",
+    "eslint": "^8.56.0",
+    "mkdirp": "^3.0.1",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "xml2js": "^0.6.2"
+  }
+}
