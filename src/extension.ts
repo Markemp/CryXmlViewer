@@ -1,25 +1,33 @@
 import * as vscode from "vscode";
 import { CryXmlSerializer } from "./utils/CryXmlSerializer";
 import * as fs from "fs";
+import { XmlContentProvider } from "./utils/XmlContentProvider";
 
 export function activate(context: vscode.ExtensionContext) {
+  const xmlProvider = new XmlContentProvider();
+  const registration = vscode.workspace.registerTextDocumentContentProvider(
+    "cryxmlviewer",
+    xmlProvider
+  );
+
   let disposable = vscode.commands.registerCommand(
     "cryxmlviewer.openBinaryXml",
     async (uri: vscode.Uri) => {
       try {
         const fileBuffer = fs.readFileSync(uri.fsPath);
+
         if (CryXmlSerializer.isBinaryXml(fileBuffer)) {
           const xmlContent = await CryXmlSerializer.readFile(fileBuffer);
+          xmlProvider.update(xmlContent);
 
-          const xmlDocument = await vscode.workspace.openTextDocument({
-            language: "xml",
-            content: xmlContent,
+          const virtualUri = uri.with({
+            scheme: "cryxmlviewer",
+            path: uri.path + ".xml",
           });
-          await vscode.window.showTextDocument(xmlDocument, { preview: false });
-        } else {
-          vscode.window.showErrorMessage(
-            "File is not a recognized binary XML format."
+          const xmlDocument = await vscode.workspace.openTextDocument(
+            virtualUri
           );
+          await vscode.window.showTextDocument(xmlDocument, { preview: false });
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -35,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable, registration);
 }
 
 export function deactivate() {}

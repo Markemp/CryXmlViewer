@@ -4,7 +4,7 @@ import { CryXmlReference } from "../models/CryXmlReference";
 import { CryXmlValue } from "../models/CryXmlValue";
 import { CryXmlHeaderInfo } from "../models/CryXmlHeaderInfo";
 import { SimpleXmlElement } from "../models/SimpleXmlElement";
-import { parseString, Builder } from "xml2js";
+import { parseString, Builder, RenderOptions, BuilderOptions } from "xml2js";
 
 interface Element {
   name: string;
@@ -16,15 +16,33 @@ export class CryXmlSerializer {
   private static PbxmlMagic = Buffer.from("pbxml\0", "utf8");
   private static CryXmlMagic = Buffer.from("CryXmlB\0", "utf8");
 
-  public static async readFile(fileBuffer: Buffer): Promise<any> {
+  public static async readFile(fileBuffer: Buffer): Promise<string> {
     try {
       const xmlContent = await this.processData(fileBuffer);
-      parseString(xmlContent, (err, result) => {
-        const formattedXml = new Builder().buildObject(result);
-        return formattedXml;
+  
+      return new Promise<string>((resolve, reject) => {
+        parseString(xmlContent, (error, result) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+  
+          try {
+            const renderOptions: RenderOptions = {
+              pretty: true
+            };
+            const builderOptions: BuilderOptions = {
+              renderOpts: renderOptions,
+              headless: true
+            };
+            const formattedXml = new Builder(builderOptions).buildObject(result);
+            resolve(formattedXml);
+          } catch (e) {
+            reject(e);
+          }
+        });
       });
-
-      return this.processData(fileBuffer);
+  
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(`Error reading file: ${e.message}`);
