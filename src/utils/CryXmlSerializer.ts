@@ -1,10 +1,10 @@
-import * as fs from "fs";
 import { parseStringPromise } from "xml2js";
 import { CryXmlNode } from "../models/CryXmlNode";
 import { CryXmlReference } from "../models/CryXmlReference";
 import { CryXmlValue } from "../models/CryXmlValue";
 import { CryXmlHeaderInfo } from "../models/CryXmlHeaderInfo";
 import { SimpleXmlElement } from "../models/SimpleXmlElement";
+import { parseString, Builder } from "xml2js";
 
 interface Element {
   name: string;
@@ -16,13 +16,15 @@ export class CryXmlSerializer {
   private static PbxmlMagic = Buffer.from("pbxml\0", "utf8");
   private static CryXmlMagic = Buffer.from("CryXmlB\0", "utf8");
 
-  public static async readFile(
-    inFile: string,
-    writeLog: boolean = false
-  ): Promise<any> {
+  public static async readFile(fileBuffer: Buffer): Promise<any> {
     try {
-      const data = await fs.promises.readFile(inFile);
-      return this.processData(data, writeLog);
+      const xmlContent = await this.processData(fileBuffer);
+      parseString(xmlContent, (err, result) => {
+        const formattedXml = new Builder().buildObject(result);
+        return formattedXml;
+      });
+
+      return this.processData(fileBuffer);
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(`Error reading file: ${e.message}`);
@@ -32,10 +34,18 @@ export class CryXmlSerializer {
     }
   }
 
-  private static async processData(
-    data: Buffer,
-    writeLog: boolean
-  ): Promise<string> {
+  public static isBinaryXml = function (buffer: Buffer): boolean {
+    return (
+      buffer
+        .subarray(0, CryXmlSerializer.PbxmlMagic.length)
+        .equals(CryXmlSerializer.PbxmlMagic) ||
+      buffer
+        .subarray(0, CryXmlSerializer.CryXmlMagic.length)
+        .equals(CryXmlSerializer.CryXmlMagic)
+    );
+  };
+
+  private static async processData(data: Buffer): Promise<string> {
     const maxMagicLength = Math.max(
       this.PbxmlMagic.length,
       this.CryXmlMagic.length

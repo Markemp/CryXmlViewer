@@ -8,7 +8,7 @@
     "url": "https://github.com/Markemp/CryXmlViewer"
   },
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -27,9 +27,8 @@
     "menus": {
       "explorer/context": [
         {
-            "when": "resourceLangId == plaintext",
-            "command": "cryxmlviewer.openBinaryXml",
-            "group": "navigation"
+          "command": "cryxmlviewer.openBinaryXml",
+          "group": "navigation"
         }
       ]
     }
