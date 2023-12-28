@@ -3,10 +3,13 @@
   "displayName": "CryXmlViewer",
   "description": "Viewer for the binary XML files used in CryEngine",
   "publisher": "Heffay Presents",
-  "icon": "src/icons/logo-120px-prod.png",
+  "icon": "icons/logo-128px-prod.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/Markemp/CryXmlViewer"
+  },
+  "author": {
+    "name": "Geoff Gerber"
   },
   "license": "MIT",
   "version": "1.0.0",
@@ -16,6 +19,7 @@
   "categories": [
     "Other"
   ],
+  "pricing": "Free",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
